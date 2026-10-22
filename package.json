@@ -2,7 +2,7 @@
   "name": "shengji-diary",
   "productName": "升级日记",
   "version": "0.1.0",
-  "description": "每日一页的任务与感悟日记 · 本地优先的桌面应用",
+  "description": "Upgrade Diary — a one-page-a-day task & reflection journal. Local-first, no account, no cloud.",
   "main": "src/main/main.js",
   "author": "PandaClose",
   "license": "MIT",

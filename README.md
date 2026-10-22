@@ -1,70 +1,98 @@
-# 升级日记
+<div align="right">
 
-> 每日一页的任务与感悟日记。做完勾掉，写两句话，看着日历一点点变满。
+<b>English</b> | [简体中文](README.zh-CN.md)
 
-升级日记是一个**本地优先**的 macOS 桌面应用（Electron），它不打算成为另一个功能全乎的任务管理器，而是专注一件事：**把「今天」记成一页**——任务打勾、随手感悟、翻日历回看，像打怪升级一样攒起自己的记录。
+</div>
+
+# Upgrade Diary
+
+> Your one-page-a-day task & reflection journal. Check off your tasks, jot down a few thoughts, and watch your calendar fill up.
+
+Upgrade Diary (升级日记) is a **local-first** desktop app for macOS and Windows, built with Electron. It doesn't try to be another feature-packed task manager — it focuses on one thing: **turning today into a single page**. Check off tasks, jot down thoughts, flip back through your calendar, and build up your streak like leveling up in a game.
 
 ![version](https://img.shields.io/badge/version-0.1.0-blue) ![license](https://img.shields.io/badge/license-MIT-green) ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)
 
-## 界面一览
+## Screenshots
 
-**深色 · 今天**
+**Dark · Today**
 
-<p align="center"><img src="assets/screenshots/today-dark.png" width="760" alt="今天视图（深色主题）：任务列表、一键搬运与感悟区"></p>
+<p align="center"><img src="assets/screenshots/today-dark.png" width="760" alt="Today view (dark theme): task list, one-click carry-over and reflection area"></p>
 
-**浅色 · 今天**
+**Light · Today**
 
-<p align="center"><img src="assets/screenshots/today-light.png" width="760" alt="今天视图（浅色主题）"></p>
+<p align="center"><img src="assets/screenshots/today-light.png" width="760" alt="Today view (light theme)"></p>
 
-**深色 · 统计与热力图**
+**Dark · Stats & heatmap**
 
-<p align="center"><img src="assets/screenshots/stats-dark.png" width="760" alt="统计视图：18 周热力图与连续统计"></p>
+<p align="center"><img src="assets/screenshots/stats-dark.png" width="760" alt="Stats view: 18-week heatmap and streaks"></p>
 
-> 以上截图使用[示例数据](scripts/seed-sample-data.js)生成，不含任何真实个人信息。
+> Screenshots above were generated with [sample data](scripts/seed-sample-data.js) and contain no real personal information.
 
-## 特性
+## Features
 
-- **每日一页**：任务（标题必填、描述选填）挂在具体日期下，完成后划线沉底，取消勾选回到原位
-- **一键搬运**：前几天没做完的任务，一个按钮全部搬到今天，原日期干净封页；没有欠账时按钮自动隐藏
-- **今日感悟**：每页一段纯文本，随写随存，历史日期也能补记
-- **日历回看**：点任意一天回到那一页，支持自由补记和修改
-- **连续记录**：当天有任务或有感悟即算记录一天，连续天数、最长纪录一目了然
-- **统计**：GitHub 风格的 18 周热力图 ＋ 累计完成、记录天数、最长/当前连续
-- **今日待办浮层**：全局快捷键唤起置顶小窗，直接勾掉当天剩下的任务；最后一个勾掉时有「今日已清 ✨」
-- **快速记录**：全局快捷键随时记一条，不用切回主窗口
-- **主题**：跟随系统（默认）/ 浅色 / 深色，手动可覆盖
-- **数据是你自己的**：本地一个明文 `data.json`，无账号无云端；每次启动自动滚动备份（保留最近 7 份）；支持导出 Markdown（按日期分节）与 JSON 备份/恢复
+- **One page per day** — tasks belong to a date. Check to strike through and sink to the bottom; uncheck to restore. Click a task to edit it; drag the ⠿ handle to reorder (within active/done groups); full keyboard flow (↑↓ select, Enter edit with autosave-on-move, Delete with undo).
+- **One-click carry-over** — unfinished tasks from previous days move into today in a single click, and are removed from their original dates (completed ones stay behind as history). The button hides itself when there is nothing left to carry. Carried tasks keep a source-date tag.
+- **Daily reflection** — one plain-text block per page, autosaved as you type. Any past day can be revisited or backfilled. Days with a reflection get a ♥ on the heatmap.
+- **Calendar review** — the sidebar month view is a mini heatmap sharing the exact same rules as the stats page. Click any date to jump to that page.
+- **Stats & streaks** — an 18-week GitHub-style heatmap graded by the *number* of completed tasks, plus four counters: total completed, days recorded, longest streak, current streak.
+- **Today overlay** — a global hotkey (⌥F by default) summons an always-on-top panel listing today's unfinished tasks. Check them off in place; clear them all for an "All clear ✨" moment.
+- **Quick capture** — another global hotkey (⌥Space by default) opens a tiny quick-add window from anywhere. Type, hit Enter, done.
+- **Themes** — follows system light/dark out of the box, or pin one manually. Both palettes are hand-tuned around a single amber accent.
+- **Export & import** — Markdown export organized by date (tasks with check states, reflections preserved), plus JSON backup and restore.
+- **Local data** — on first launch you pick a data folder. It can be relocated anytime with automatic migration. Every launch rolls a backup (last 7 kept).
 
-## 不做什么
+Keyboard shortcuts can be remapped in Settings.
 
-提醒推送、项目/标签/优先级、云同步、多设备、协作。它是一个安静的个人日记本，不是工作流平台。
+## The ideas behind it
 
-## 开发
+**One page per day.** The date is the primary key; tasks belong to a day by nature. Opening the app *is* opening today's page. History isn't a filtered view of a task pool — it's a journal you flip through, one page at a time.
+
+**Carry over, don't roll over.** Most todo apps silently roll unfinished tasks into tomorrow — pleasant in the moment, and the source of ever-growing guilt lists. Upgrade Diary refuses to do that. It tells you exactly how many tasks are left behind, and *you* decide: carry them into today, or delete them. Completed tasks stay on their original dates as history, and each finished day closes cleanly.
+
+**Restrained gamification.** A streak counter, a heatmap, and an "All clear ✨" moment when the last task of the day gets checked. No levels, no badges, no confetti cannons — just enough feedback to make persistence visible.
+
+**Your data, literally.** Everything lives in one plain-text `data.json` inside a folder you chose. No account, no cloud, no network calls. Rolling backups on every launch, Markdown/JSON export whenever you want out — and because it's plain text, you can hand it to an AI for review and reflection.
+
+## What it deliberately doesn't do
+
+No reminders. No priorities, tags or due dates. No cloud sync. No multi-device. No collaboration.
+
+> It's a quiet personal journal, not a workflow platform.
+
+For some people that's a dealbreaker. For the people this is built for, it's the whole point.
+
+## Development
 
 ```bash
 npm install
-npm start        # 启动开发窗口
-npm run icon     # 重新生成应用图标（build/icon.png）
-npm run dist     # 打包 macOS dmg 到 dist/
-npm run dist:win # 交叉打包 Windows 安装包到 dist/
+npm start        # launch the dev window
+npm run icon     # regenerate the app icon (build/icon.png)
+npm run dist     # package a macOS dmg into dist/
+npm run dist:win # cross-package a Windows installer into dist/
 ```
 
-要求 Node.js ≥ 18。首次启动会引导你选择数据文件夹（默认建议 `~/Documents/升级日记/`）。
+Node.js ≥ 18 required. On first launch the app walks you through picking a data folder (default suggestion: `~/Documents/Upgrade Diary/`).
 
-## 系统要求
+Utility scripts:
 
-- macOS 12 及以上（Apple Silicon）
-- Windows 10 / 11（64 位）
+```bash
+node scripts/test-store.js                                   # data-layer unit tests
+node scripts/seed-sample-data.js <userDataDir> <dataDir>     # seed generic sample data for screenshots
+SJ_SHOT=out.png SJ_VIEW=stats npm start                      # capture a UI screenshot (see src/main/main.js)
+```
 
-## 反馈
+## System requirements
 
-遇到问题或有功能建议，欢迎[提交 Issue](https://github.com/PandaClose/shengji-diary/issues)。项目为个人作品，按需维护，响应可能不快，但每条都会看。
+- macOS 12+ (Apple Silicon)
+- Windows 10 / 11 (64-bit)
 
-## 数据与隐私
+## Data & privacy
 
-- 所有数据只存在你本机你选的文件夹里：`data.json` ＋ `backups/` ＋ 导出的文档
-- 应用不联网，不收集任何数据
-- 数据文件是明文 JSON，随时可以自己备份、进 git、或交给别的工具处理
+The app makes zero network calls and collects nothing. All data lives in plain text inside the folder you chose: `data.json` plus `backups/` (rolling, last 7 kept on every launch). You can back it up with anything, track it in git, or hand it to another tool.
+
+## Feedback
+
+Found a bug or have an idea? [Open an issue](https://github.com/PandaClose/shengji-diary/issues). This is a personal project maintained as-needed — responses may be slow, but every issue gets read.
 
 ## License
 

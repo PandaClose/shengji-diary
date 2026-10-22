@@ -4,7 +4,23 @@
 
 升级日记是一个**本地优先**的 macOS 桌面应用（Electron），它不打算成为另一个功能全乎的任务管理器，而是专注一件事：**把「今天」记成一页**——任务打勾、随手感悟、翻日历回看，像打怪升级一样攒起自己的记录。
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![license](https://img.shields.io/badge/license-MIT-green)
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![license](https://img.shields.io/badge/license-MIT-green) ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)
+
+## 界面一览
+
+**深色 · 今天**
+
+<p align="center"><img src="assets/screenshots/today-dark.png" width="760" alt="今天视图（深色主题）：任务列表、一键搬运与感悟区"></p>
+
+**浅色 · 今天**
+
+<p align="center"><img src="assets/screenshots/today-light.png" width="760" alt="今天视图（浅色主题）"></p>
+
+**深色 · 统计与热力图**
+
+<p align="center"><img src="assets/screenshots/stats-dark.png" width="760" alt="统计视图：18 周热力图与连续统计"></p>
+
+> 以上截图使用[示例数据](scripts/seed-sample-data.js)生成，不含任何真实个人信息。
 
 ## 特性
 

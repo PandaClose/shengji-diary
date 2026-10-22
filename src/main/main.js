@@ -6,9 +6,9 @@ const path = require('path');
 const fs = require('fs');
 const { createStore, buildMarkdown, computeStats, normalize, todayKey, fmtKey } = require('./store');
 
-// 开发/测试实例使用独立 userData，避免与正式安装版触发单实例锁
-if (process.env.SJ_DEV || process.env.SJ_AUTO_DIALOG) {
-  app.setPath('userData', '/tmp/sjd-dev-userdata');
+// 开发/测试/截图实例使用独立 userData，避免与正式安装版触发单实例锁
+if (process.env.SJ_DEV || process.env.SJ_AUTO_DIALOG || process.env.SJ_SHOT) {
+  app.setPath('userData', process.env.SJ_SHOT ? '/tmp/sjd-shot-userdata' : '/tmp/sjd-dev-userdata');
 }
 
 const isDev = !!process.env.SJ_DEV;
@@ -415,6 +415,8 @@ if (!gotLock) {
 
   app.whenReady().then(() => {
     ensureStore();
+    // 截图模式下允许从环境变量指定主题（示例数据另由种子脚本准备）
+    if (process.env.SJ_THEME && store) { store.updateSettings({ theme: process.env.SJ_THEME }); applyTheme(); }
     setupMenu();
     registerIpc();
     createMainWindow();
@@ -442,6 +444,28 @@ if (!gotLock) {
           process.exit(42);
         }, 8000);
       }, 2500);
+    }
+    // 文档钩子：SJ_SHOT=<输出路径> 时自动截图（SJ_VIEW=stats 可切到统计视图），
+    // 配合种子脚本生成的示例数据，用于生成 README 界面截图
+    if (process.env.SJ_SHOT) {
+      setTimeout(async () => {
+        try {
+          if (process.env.SJ_VIEW === 'stats') {
+            await mainWin.webContents.executeJavaScript(
+              "document.querySelectorAll('#nav .nav-btn')[1].click()"
+            );
+            await new Promise(r => setTimeout(r, 800));
+          }
+          const img = await mainWin.webContents.capturePage();
+          fs.writeFileSync(process.env.SJ_SHOT, img.toPNG());
+          console.log('[shot] written:', process.env.SJ_SHOT);
+        } catch (err) {
+          console.error('[shot] failed:', err);
+          app.exit(1);
+          return;
+        }
+        app.exit(0);
+      }, 3200);
     }
     if (!app.isPackaged && fs.existsSync(iconPath)) {
       try { if (app.dock) app.dock.setIcon(iconPath); } catch (e) { /* 忽略 */ }

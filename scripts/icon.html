@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+  // 琥珀渐变圆角方块 + 墨色圆头对勾；画布本身保持透明，圆角外 alpha=0。
+  // 遵循 Apple 图标网格：1024 画布内画 824 的方块（四周留 100 呼吸边，圆角 185），
+  // 否则 Dock 里会比其他应用图标显大一圈。
+  const ctx = document.getElementById('c').getContext('2d');
+  const INSET = 100, SIZE = 824, RADIUS = 185;
+  ctx.beginPath();
+  ctx.roundRect(INSET, INSET, SIZE, SIZE, RADIUS);
+  const g = ctx.createLinearGradient(0, 0, 0, 1024);
+  g.addColorStop(0, '#efbd58');
+  g.addColorStop(1, '#dd9d28');
+  ctx.fillStyle = g;
+  ctx.fill();
+  ctx.save();
+  ctx.translate(INSET, INSET);
+  ctx.scale(SIZE / 1024, SIZE / 1024);
+  ctx.beginPath();
+  ctx.moveTo(292, 542);
+  ctx.lineTo(452, 692);
+  ctx.lineTo(744, 352);
+  ctx.lineWidth = 96;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#241b04';
+  ctx.stroke();
+  ctx.restore();
+</script>
+</body>
+</html>

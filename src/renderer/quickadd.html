@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+<title>快速记录</title>
+<style>
+  :root {
+    --bg: #ffffff; --hair: #e2e2e6; --text: #1d1d1f; --muted: #86868b;
+    --accent: #e0a52e; --accent-ink: #4a3205; --panel: #f7f7f9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1f2127; --hair: rgba(255, 255, 255, .1); --text: #e9e7ea; --muted: #6f6d76;
+      --accent: #e2b04a; --accent-ink: #1c1503; --panel: #23252b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, "PingFang SC", sans-serif; color: var(--text);
+    background: var(--bg); border: 1px solid var(--hair); border-radius: 12px;
+    height: 100vh; display: flex; flex-direction: column; padding: 14px 16px;
+  }
+  .label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .row { display: flex; gap: 10px; flex: 1; }
+  input {
+    flex: 1; border: 1px solid var(--hair); background: var(--panel); border-radius: 9px;
+    outline: none; font-size: 14px; padding: 10px 14px; color: var(--text); font-family: inherit;
+  }
+  input:focus { border-color: var(--accent); }
+  .done {
+    align-self: center; font-size: 14px; font-weight: 600; color: var(--accent);
+    display: none;
+  }
+  .tip { font-size: 11px; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="label">记一条到今天</div>
+  <div class="row">
+    <input id="inp" type="text" placeholder="想到什么就写下来，回车保存">
+    <span class="done" id="done">✓ 已记录</span>
+  </div>
+  <div class="tip">回车保存 · Esc 关闭</div>
+<script src="quickadd.js"></script>
+</body>
+</html>

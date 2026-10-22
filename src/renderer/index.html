@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<title>升级日记</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app" class="hidden">
+  <div class="titlebar">
+    <span class="tb-title">升级日记</span>
+    <span class="tb-right">
+      <span class="tb-hint" id="tbHint"></span>
+      <button class="tb-btn" id="btnOverlay" type="button">今日待办浮层</button>
+    </span>
+  </div>
+
+  <div class="win-body">
+    <aside class="side">
+      <div class="app-name">升级日记</div>
+      <div class="streak"><b id="streakNum">0</b><span>连续记录 · 天</span></div>
+
+      <div class="sec-label cal-label">
+        <span>日历</span>
+        <span class="cal-nav">
+          <button id="calPrev" type="button" title="上个月">‹</button>
+          <button id="calNext" type="button" title="下个月">›</button>
+        </span>
+      </div>
+      <div class="cal-title" id="calTitle"></div>
+      <div class="cal" id="cal"></div>
+
+      <div class="s-rows">
+        <div class="s-row"><span>累计完成</span><b id="stDone" class="tnum">0</b></div>
+        <div class="s-row"><span>记录天数</span><b id="stDays" class="tnum">0</b></div>
+        <div class="s-row"><span>最长连续</span><b id="stLong" class="tnum">0</b></div>
+      </div>
+
+      <nav class="dark-nav" id="nav">
+        <button class="nav-btn on" data-view="today" type="button">今天</button>
+        <button class="nav-btn" data-view="stats" type="button">统计</button>
+      </nav>
+
+      <div class="sec-label mt">外观</div>
+      <div class="seg" id="seg">
+        <button type="button" data-mode="system">跟随系统</button>
+        <button type="button" data-mode="light">浅色</button>
+        <button type="button" data-mode="dark">深色</button>
+      </div>
+
+      <div class="side-foot">
+        <button id="btnExport" type="button">导出</button>
+        <button id="btnImport" type="button">导入</button>
+        <button id="btnSettings" type="button">设置</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="view" id="viewToday">
+        <header class="d-head">
+          <div class="d-date" id="dDate"></div>
+          <div class="chip"><span id="chipNum" class="tnum">0/0</span> 已完成</div>
+        </header>
+        <div class="carry" id="carry" hidden>
+          <span id="carryText"></span>
+          <button class="carry-btn" id="btnCarry" type="button">一键搬运</button>
+        </div>
+        <div class="card-list">
+          <div class="t-list" id="list"></div>
+          <div class="t-add"><input class="t-input" id="inpAdd" type="text"></div>
+        </div>
+        <div class="note">
+          <div class="note-head">感悟 · 随写随存 <span class="save-hint" id="saveHint">已自动保存</span></div>
+          <textarea class="note-input" id="note" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="view" id="viewStats" hidden>
+        <header class="d-head"><div class="d-date">统计 · 回顾</div></header>
+        <div class="stat-cards">
+          <div class="stat-card"><span>累计完成</span><b id="cDone" class="tnum">0</b></div>
+          <div class="stat-card"><span>记录天数</span><b id="cDays" class="tnum">0</b></div>
+          <div class="stat-card"><span>最长连续</span><b id="cLong" class="tnum">0</b></div>
+          <div class="stat-card"><span>当前连续</span><b id="cCur" class="tnum">0</b></div>
+        </div>
+        <div class="heat-head">
+          <span class="heat-title" id="heatRange"></span>
+          <span class="heat-legend">少<i class="L0"></i><i class="L1"></i><i class="L2"></i><i class="L3"></i><i class="L4"></i><i class="L5"></i>多<span class="lg-note">· <b class="lg-heart">♥</b> 当天有感悟</span></span>
+        </div>
+        <div class="heatmap" id="heat"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal" id="settingsModal" hidden>
+    <div class="modal-mask" data-close></div>
+    <div class="modal-panel">
+      <div class="modal-title">设置</div>
+      <div class="set-row">
+        <div class="set-label">数据位置</div>
+        <div class="set-body dir-body">
+          <span class="path" id="setDataDir"></span>
+          <div class="dir-input-row">
+            <input class="dir-input" id="dirInput" type="text" placeholder="或直接输入路径，如 ~/Documents/升级日记">
+            <button class="mini-btn" id="btnUseDir" type="button">使用</button>
+            <button class="mini-btn" id="btnChangeDir" type="button">浏览…</button>
+          </div>
+        </div>
+      </div>
+      <div class="set-row">
+        <div class="set-label">快捷键</div>
+        <div class="set-body hotkeys">
+          <div class="hk-row"><span>快速记录</span><kbd id="hkQuick">—</kbd><button class="mini-btn" data-slot="quickAdd" type="button">修改</button></div>
+          <div class="hk-row"><span>待办浮层</span><kbd id="hkOverlay">—</kbd><button class="mini-btn" data-slot="overlay" type="button">修改</button></div>
+          <div class="hk-tip" id="hkTip"></div>
+        </div>
+      </div>
+      <div class="set-row">
+        <div class="set-label">备份与恢复</div>
+        <div class="set-body">
+          <button class="mini-btn" id="btnExportJson" type="button">导出 JSON</button>
+          <button class="mini-btn" id="btnImportJson" type="button">导入 JSON</button>
+        </div>
+      </div>
+      <div class="set-about">升级日记 v0.1.0 · 数据仅存本机 · MIT</div>
+    </div>
+  </div>
+</div>
+
+<div id="onboarding" class="onboarding" hidden>
+  <div class="ob-logo">✓</div>
+  <h1>欢迎使用升级日记</h1>
+  <p>每天一页：任务打勾、写几句感悟，看着日历一点点变满。<br>所有数据只保存在你选择的本地文件夹里，无账号、不联网。</p>
+  <button id="btnChooseDir" type="button">浏览文件夹…</button>
+  <div class="ob-manual">
+    <input id="obPath" type="text" placeholder="或直接输入路径，如 ~/Documents/升级日记">
+    <button id="btnUsePath" type="button">使用</button>
+  </div>
+  <div class="ob-hint">文件夹不存在会自动创建 · 数据只存本机</div>
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+<title>今日待办</title>
+<style>
+  :root {
+    --bg: #ffffff; --panel2: #f0f0f3; --hair: #e2e2e6; --text: #1d1d1f; --muted: #86868b;
+    --accent: #e0a52e; --accent-ink: #4a3205; --accent-text: #9a6b00;
+    --accent-bg: rgba(224, 165, 46, .14); --check-border: #c7c7cc; --hover: rgba(0, 0, 0, .05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1f2127; --panel2: #23252b; --hair: rgba(255, 255, 255, .1); --text: #e9e7ea; --muted: #6f6d76;
+      --accent: #e2b04a; --accent-ink: #1c1503; --accent-text: #e2b04a;
+      --accent-bg: rgba(226, 176, 74, .12); --check-border: rgba(255, 255, 255, .25); --hover: rgba(255, 255, 255, .05);
+    }
+  }
+  * { box-sizing: border-box; }
+  /* 防御：.list/.cleared 的 display:flex 会压过 [hidden] 的默认隐藏，必须显式镇压 */
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; font-family: -apple-system, "PingFang SC", sans-serif; color: var(--text);
+    background: var(--bg); border: 1px solid var(--hair); border-radius: 12px;
+    height: 100vh; overflow: hidden; user-select: none;
+    display: flex; flex-direction: column;
+    -webkit-app-region: drag;
+  }
+  .head { display: flex; align-items: baseline; gap: 8px; padding: 14px 16px 10px; }
+  .head .t { font-size: 14px; font-weight: 600; }
+  .head b { color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .head .close {
+    margin-left: auto; border: none; background: none; cursor: pointer;
+    font-size: 13px; line-height: 1; color: var(--muted); padding: 4px 6px;
+    border-radius: 5px; -webkit-app-region: no-drag;
+  }
+  .head .close:hover { background: var(--hover); color: var(--text); }
+  .list { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 2px; padding: 0 8px 6px; overflow-y: auto; -webkit-app-region: no-drag; }
+  .ov-add { flex: none; padding: 0 10px 10px; -webkit-app-region: no-drag; }
+  .ov-add input {
+    width: 100%; border: 1px solid var(--hair); background: var(--panel2); border-radius: 8px;
+    outline: none; font-size: 13px; padding: 8px 10px; color: var(--text); font-family: inherit;
+  }
+  .ov-add input:focus { border-color: var(--accent); }
+  .ov-add input::placeholder { color: var(--muted); }
+  .cleared { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .item {
+    display: flex; align-items: center; gap: 11px; border: none; background: none; text-align: left;
+    padding: 11px 10px; border-radius: 8px; cursor: pointer; color: var(--text);
+    font-size: 14px; font-family: inherit;
+  }
+  .item:hover { background: var(--hover); }
+  .item .chk { flex: none; width: 18px; height: 18px; border-radius: 6px; border: 1.5px solid var(--check-border); }
+  .item:hover .chk { border-color: var(--accent); }
+  .item .src { font-size: 11px; color: var(--accent-text); background: var(--accent-bg); border-radius: 4px; padding: 1px 5px; margin-left: auto; }
+  .cleared { text-align: center; font-size: 20px; font-weight: 600; color: var(--accent-text); padding: 40px 0 32px; -webkit-app-region: no-drag; }
+</style>
+</head>
+<body>
+  <div class="head"><span class="t">今日待办</span><b id="count">0</b><button class="close" id="ovClose" type="button" title="关闭（也可再按一次快捷键）">✕</button></div>
+  <div class="list" id="list"></div>
+  <div class="cleared" id="cleared" hidden>今日已清 ✨</div>
+  <div class="ov-add"><input id="ovAdd" type="text" placeholder="＋ 记一条任务，回车即可"></div>
+<script src="overlay.js"></script>
+</body>
+</html>

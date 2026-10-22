@@ -1,0 +1,58 @@
+{
+  "name": "shengji-diary",
+  "productName": "升级日记",
+  "version": "0.1.0",
+  "description": "每日一页的任务与感悟日记 · 本地优先的桌面应用",
+  "main": "src/main/main.js",
+  "author": "PandaClose",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PandaClose/shengji-diary.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PandaClose/shengji-diary/issues"
+  },
+  "homepage": "https://github.com/PandaClose/shengji-diary#readme",
+  "scripts": {
+    "start": "electron .",
+    "icon": "electron scripts/gen-icon.js",
+    "dist": "electron-builder --mac dmg",
+    "dist:win": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.pandaclose.shengji-diary",
+    "productName": "升级日记",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "build/icon.png",
+      "package.json"
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "升级日记-Setup-${version}.${ext}"
+    }
+  }
+}
